@@ -6,7 +6,7 @@ export async function GET(request: NextRequest) {
   const clientToken = request.cookies.get("token")?.value;
 
   if (isAuthorized == "true") {
-    if (clientToken) {
+    if (clientToken && clientToken !== "") {
       const queryResult = await tursoClient().execute({
         sql: "SELECT user_id,username FROM users where token=?",
         args: [clientToken],
@@ -17,11 +17,18 @@ export async function GET(request: NextRequest) {
           id: queryResult.rows[0]["user_id"],
           username: queryResult.rows[0]["username"],
         },
+        authorize: true,
+      });
+    } else {
+      return NextResponse.json({
+        message: "You are not authorized",
+        authorize: false,
       });
     }
   } else {
     return NextResponse.json({
       message: "You are not authorized",
+      authorize: false,
     });
   }
 }

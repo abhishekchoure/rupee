@@ -35,8 +35,8 @@ export function LoginForm() {
     async function isTokenValid() {
       const response = await fetch("http://localhost:3000/api/auth/check");
       const data = await response.json();
-      const { message, user } = await data;
-      if (user) {
+      const { message, user, authorize } = await data;
+      if (authorize === true) {
         toast(message, {
           description: "Login",
           action: {

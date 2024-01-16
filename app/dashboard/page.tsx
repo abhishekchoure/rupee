@@ -1,6 +1,6 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   Card,
   CardContent,
@@ -34,8 +34,31 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import { MoonIcon, SunIcon } from "lucide-react";
+import { useEffect } from "react";
+import { toast } from "sonner";
 
 export default function DashboardPage() {
+  const router = useRouter();
+  useEffect(() => {
+    async function authCheck() {
+      const response = await fetch("http://localhost:3000/api/auth/check");
+      const { message, authorize } = await response.json();
+      if (authorize === false) {
+        toast("Please login again", {
+          description: "Alert",
+          action: {
+            label: "OK",
+            onClick: () => {},
+          },
+        });
+
+        router.replace("/login");
+      }
+    }
+
+    authCheck();
+  }, []);
+
   const params = useSearchParams();
   const id = params.get("id");
   const username = params.get("username");
