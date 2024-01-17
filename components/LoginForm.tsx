@@ -31,23 +31,24 @@ const loginFormSchema = z.object({
 
 export function LoginForm() {
   const router = useRouter();
-  useEffect(() => {
-    async function isTokenValid() {
-      const response = await fetch("http://localhost:3000/api/auth/check");
-      const data = await response.json();
-      const { message, user, authorize } = await data;
-      if (authorize === true) {
-        toast(message, {
-          description: "Login",
-          action: {
-            label: "OK",
-            onClick: () => {},
-          },
-        });
-        router.push(`/dashboard/?id=${user.id}&username=${user.username}`);
-      }
-    }
 
+  async function isTokenValid() {
+    const response = await fetch("http://localhost:3000/api/auth/check");
+    const data = await response.json();
+    const { message, user, authorize } = await data;
+    if (authorize === true) {
+      toast(message, {
+        description: "Login",
+        action: {
+          label: "OK",
+          onClick: () => {},
+        },
+      });
+      router.push(`/dashboard/?id=${user.id}&username=${user.username}`);
+    }
+  }
+
+  useEffect(() => {
     isTokenValid();
   }, []);
 
@@ -60,23 +61,33 @@ export function LoginForm() {
   });
 
   async function onLoginSubmit(values: z.infer<typeof loginFormSchema>) {
-    const response = await fetch("http://localhost:3000/api/auth/login", {
-      method: "POST",
-      body: JSON.stringify(values),
-    });
-    const { message, user } = await response.json();
-    if (user) {
-      router.push(`/dashboard/?id=${user.id}&username=${user.username}`);
-      toast(message, {
-        description: "Login",
-        action: {
-          label: "OK",
-          onClick: () => {},
-        },
+    try {
+      const response = await fetch("http://localhost:3000/api/auth/login", {
+        method: "POST",
+        body: JSON.stringify(values),
       });
-    } else {
-      toast(message, {
-        description: "Login",
+      const { message, user } = await response.json();
+      if (user) {
+        router.push(`/dashboard/?id=${user.id}&username=${user.username}`);
+        toast(message, {
+          description: "Login",
+          action: {
+            label: "OK",
+            onClick: () => {},
+          },
+        });
+      } else {
+        toast(message, {
+          description: "Login",
+          action: {
+            label: "OK",
+            onClick: () => {},
+          },
+        });
+      }
+    } catch (error) {
+      toast("Something went wrong", {
+        description: "Error",
         action: {
           label: "OK",
           onClick: () => {},

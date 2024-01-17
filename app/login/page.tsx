@@ -1,10 +1,5 @@
 import { LoginForm } from "@/components/LoginForm";
 
-export type User = {
-  id: string;
-  username: string;
-};
-
 export default async function LoginPage() {
   return (
     <div className="flex flex-col justify-center items-center w-full h-screen gap-5">

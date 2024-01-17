@@ -36,13 +36,14 @@ import Link from "next/link";
 import { MoonIcon, SunIcon } from "lucide-react";
 import { useEffect } from "react";
 import { toast } from "sonner";
+import AddButton from "@/components/AddButton";
 
 export default function DashboardPage() {
   const router = useRouter();
   useEffect(() => {
     async function authCheck() {
       const response = await fetch("http://localhost:3000/api/auth/check");
-      const { message, authorize } = await response.json();
+      const { authorize } = await response.json();
       if (authorize === false) {
         toast("Please login again", {
           description: "Alert",
