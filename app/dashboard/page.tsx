@@ -36,7 +36,6 @@ import Link from "next/link";
 import { MoonIcon, SunIcon } from "lucide-react";
 import { useEffect } from "react";
 import { toast } from "sonner";
-import AddButton from "@/components/AddButton";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -89,7 +88,7 @@ export default function DashboardPage() {
   ];
 
   return (
-    <div>
+    <>
       <div className="flex m-4 justify-between items-center">
         <h1 className="text-2xl font-bold">Dashboard</h1>
         <div className="flex justify-between gap-4">
@@ -204,6 +203,6 @@ export default function DashboardPage() {
           </TableFooter>
         </Table>
       </div>
-    </div>
+    </>
   );
 }
